@@ -13,6 +13,7 @@ Route::name('frontend.')->group(function () {
         Route::get('/blog', 'blog')->name('blog');
         Route::get('/blog-details', 'blogDetails')->name('blogDetails');
         Route::get('/contact', 'contact')->name('contact');
+        Route::post('/contact/submit', 'contactSubmit')->name('contact.submit');
         Route::get('/faq', 'faq')->name('faq');
         Route::get('/gallery', 'gallery')->name('gallery');
         Route::get('/privacy-policy', 'privacyPolicy')->name('privacyPolicy');
@@ -24,8 +25,13 @@ Route::name('frontend.')->group(function () {
 });
 
 
-Route::middleware('auth')->controller(DashboardController::class)->group(function () {
-    Route::get('/admin', 'index')->name('index');
+Route::middleware('auth')->prefix('admin')->name('admin.')->controller(DashboardController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/leads', 'leads')->name('leads');
+    Route::get('/faqs', 'faqs')->name('faqs');
+    Route::get('/stories', 'stories')->name('stories');
+    Route::get('/settings', 'settings')->name('settings');
+    Route::post('/settings/update', 'settingsUpdate')->name('settings.update');
 });
 
 // Authentication

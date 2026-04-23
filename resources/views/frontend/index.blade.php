@@ -339,57 +339,24 @@
         </div>
       </div>
       <div class="grid" id="videoGrid">
-
-        <article class="card reveal" data-category="ivf ethics">
+        @foreach($stories as $story)
+        <article class="card reveal" data-category="{{ strtolower($story->treatment_type) }}">
           <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/_B8vH0l4Eio?controls=1" loading="lazy" allowfullscreen
-              title="The 1% Chance Story"></iframe>
-            <span class="card-badge">IVF · Ethical</span>
+            <iframe src="{{ $story->video_url }}" loading="lazy" allowfullscreen
+              title="{{ $story->title }}"></iframe>
+            <span class="card-badge">{{ $story->treatment_type }}</span>
           </div>
           <div class="card-body">
-            <span class="card-tag">#IVFSuccess</span>
-            <h3 class="card-title">The 1% Chance Story</h3>
+            <span class="card-tag">#{{ str_replace(' ', '', $story->treatment_type) }}Success</span>
+            <h3 class="card-title">{{ $story->title }}</h3>
             <div class="card-meta"><span class="card-meta-item"><svg width="11" height="11" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 6v6l4 2" />
-                </svg>3 min watch</span></div>
+                </svg>Dynamic watch</span></div>
           </div>
         </article>
-
-        <article class="card reveal" data-category="iui">
-          <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/YOUR_ID_2?controls=1" loading="lazy" allowfullscreen
-              title="Is IUI Right for You?"></iframe>
-            <span class="card-badge">IUI</span>
-          </div>
-          <div class="card-body">
-            <span class="card-tag">#IUITips</span>
-            <h3 class="card-title">Is IUI Right for You?</h3>
-            <div class="card-meta"><span class="card-meta-item"><svg width="11" height="11" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 6v6l4 2" />
-                </svg>4 min watch</span></div>
-          </div>
-        </article>
-
-        <article class="card reveal" data-category="pcos">
-          <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/YOUR_ID_3?controls=1" loading="lazy" allowfullscreen
-              title="Managing Metabolic PCOS"></iframe>
-            <span class="card-badge">PCOS</span>
-          </div>
-          <div class="card-body">
-            <span class="card-tag">#PCOSCare</span>
-            <h3 class="card-title">Managing Metabolic PCOS</h3>
-            <div class="card-meta"><span class="card-meta-item"><svg width="11" height="11" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 6v6l4 2" />
-                </svg>5 min watch</span></div>
-          </div>
-        </article>
+        @endforeach
       </div>
     </div>
   </section>
@@ -483,62 +450,18 @@
           </svg></a>
       </div>
       <div class="faq-list reveal delay-1">
-        <div class="faq-item"><button class="faq-question">How long does an IVF cycle typically take?<div
+        @foreach($faqs as $faq)
+        <div class="faq-item"><button class="faq-question">{{ $faq->question }}<div
               class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)"
                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg></div></button>
           <div class="faq-answer">
-            <p>Typically 4–8 weeks in total — covering initial consultations, ovarian stimulation (10–14 days), egg
-              retrieval, fertilization, and embryo transfer.</p>
+            <p>{{ $faq->answer }}</p>
           </div>
         </div>
-        <div class="faq-item"><button class="faq-question">Is financial counseling available?<div class="faq-icon"><svg
-                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg></div></button>
-          <div class="faq-answer">
-            <p>Absolutely. We believe in zero hidden costs. Our financial coordinators establish a clear, transparent cost
-              roadmap before any treatment begins — no surprises.</p>
-          </div>
-        </div>
-        <div class="faq-item"><button class="faq-question">What should I bring to my first appointment?<div
-              class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)"
-                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg></div></button>
-          <div class="faq-answer">
-            <p>Any previous medical records, prior fertility test results, a list of current medications, and history of
-              previous treatments. We'll walk through everything together.</p>
-          </div>
-        </div>
-        <div class="faq-item"><button class="faq-question">Do both partners need to attend?<div class="faq-icon"><svg
-                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg></div></button>
-          <div class="faq-answer">
-            <p>For the initial consultation, we strongly encourage both partners to attend for comprehensive assessment.
-              Follow-ups can often be managed individually.</p>
-          </div>
-        </div>
-        <div class="faq-item"><button class="faq-question">How is success rate reported honestly?<div class="faq-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-            </div></button>
-          <div class="faq-answer">
-            <p>We report live birth rate per cycle — not just clinical pregnancy rate. We also share age-stratified data
-              so your personal probability is always clear before any decision.</p>
-          </div>
-        </div>
+        @endforeach
       </div>
     </div>
   </section>
@@ -556,7 +479,7 @@
             stroke-linejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg></a>
-        <a href="https://wa.me/919999999999" target="_blank" rel="noopener" class="btn-outline"><svg width="15"
+        <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '919999999999' }}" target="_blank" rel="noopener" class="btn-outline"><svg width="15"
             height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round">
             <path

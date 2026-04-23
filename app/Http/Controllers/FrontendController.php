@@ -8,7 +8,11 @@ class FrontendController extends Controller
 {
     public function index()
     {
-        return view('frontend.index');
+        $faqs = \App\Models\Faq::where('is_active', true)->orderBy('order')->get();
+        $stories = \App\Models\SuccessStory::where('is_active', true)->orderBy('order')->get();
+        $settings = \App\Models\SiteSetting::all()->pluck('value', 'key');
+
+        return view('frontend.index', compact('faqs', 'stories', 'settings'));
     }
 
     public function about()
@@ -28,7 +32,30 @@ class FrontendController extends Controller
 
     public function contact()
     {
-        return view('frontend.contact');
+        $settings = \App\Models\SiteSetting::all()->pluck('value', 'key');
+        return view('frontend.contact', compact('settings'));
+    }
+
+    public function contactSubmit(Request $request)
+    {
+        $request->validate([
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'concern' => 'required',
+            'message' => 'nullable',
+        ]);
+
+        \App\Models\Lead::create([
+            'name' => $request->firstName . ' ' . $request->lastName,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'subject' => $request->concern,
+            'message' => $request->message ?? 'No message provided',
+        ]);
+
+        return response()->json(['success' => true]);
     }
 
     public function faq()

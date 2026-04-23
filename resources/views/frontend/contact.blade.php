@@ -53,31 +53,32 @@
       <p class="form-section-sub" id="formSub">Fill in your details and we'll reach out within 24 hours to confirm your
         appointment.</p>
 
-      <form id="contactForm" novalidate>
+      <form id="contactForm" novalidate action="{{ route('frontend.contact.submit') }}" method="POST">
+        @csrf
         <div class="form-row">
           <div class="form-group">
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName" placeholder="Jane" required>
+            <input type="text" id="firstName" name="firstName" placeholder="Jane" required>
           </div>
           <div class="form-group">
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" placeholder="Doe" required>
+            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" id="email" placeholder="jane@example.com" required>
+            <input type="email" id="email" name="email" placeholder="jane@example.com" required>
           </div>
           <div class="form-group">
             <label for="phone">Phone / WhatsApp</label>
-            <input type="tel" id="phone" placeholder="+91 98765 43210" required>
+            <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" required>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="concern">Primary Concern</label>
-            <select id="concern" required>
+            <select id="concern" name="concern" required>
               <option value="" disabled selected>Select a concern</option>
               <option>IVF / ICSI Treatment</option>
               <option>IUI Consultation</option>
@@ -91,7 +92,7 @@
           </div>
           <div class="form-group">
             <label for="location">Preferred Location</label>
-            <select id="location">
+            <select id="location" name="location">
               <option value="" disabled selected>Choose clinic</option>
               <option>Nimaaya Women's Center, Surat</option>
               <option>Nimaaya Baroda, Vadodara</option>
@@ -102,7 +103,7 @@
         <div class="form-row" style="grid-template-columns: 1fr; margin-bottom: 1.2rem;">
           <div class="form-group full">
             <label for="message">Your Story</label>
-            <textarea id="message"
+            <textarea id="message" name="message"
               placeholder="Tell us briefly about your fertility journey so far, any previous treatments, and how we can best help you..."></textarea>
           </div>
         </div>
@@ -183,7 +184,7 @@
             </div>
             <div class="quick-item-text">
               <strong>WhatsApp</strong>
-              <a href="https://wa.me/912656839900">+91-265-6839900</a>
+              <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '912656839900' }}">{{ $settings['phone_number'] ?? '+91-265-6839900' }}</a>
             </div>
           </div>
           <div class="quick-item">
@@ -196,7 +197,7 @@
             </div>
             <div class="quick-item-text">
               <strong>Email</strong>
-              <a href="mailto:doctoryuvi@nimaaya.com">doctoryuvi@nimaaya.com</a>
+              <a href="mailto:{{ $settings['email_address'] ?? 'doctoryuvi@nimaaya.com' }}">{{ $settings['email_address'] ?? 'doctoryuvi@nimaaya.com' }}</a>
             </div>
           </div>
           <div class="quick-item">
@@ -209,7 +210,7 @@
             </div>
             <div class="quick-item-text">
               <strong>Phone</strong>
-              <a href="tel:+912656839900">+91-265-6839900</a>
+              <a href="tel:{{ str_replace(' ', '', $settings['phone_number'] ?? '+912656839900') }}">{{ $settings['phone_number'] ?? '+91-265-6839900' }}</a>
             </div>
           </div>
         </div>
@@ -311,13 +312,34 @@
         setTimeout(() => consent.style.outline = '', 2000);
         return;
       }
-      form.style.opacity = '0';
-      form.style.transform = 'translateY(-10px)';
-      form.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-      setTimeout(() => {
-        form.style.display = 'none';
-        successMsg.classList.add('show');
-      }, 300);
+
+      const formData = new FormData(form);
+      
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          form.style.opacity = '0';
+          form.style.transform = 'translateY(-10px)';
+          form.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          setTimeout(() => {
+            form.style.display = 'none';
+            successMsg.classList.add('show');
+          }, 300);
+        } else {
+          alert('Something went wrong. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      });
     });
 
     // ── Scroll reveal ──
